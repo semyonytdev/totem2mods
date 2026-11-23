@@ -56,7 +56,7 @@ public class TotemcukClient implements ClientModInitializer {
 				ResourceLoader.registerBuiltinPack(
 						Identifier.fromNamespaceAndPath(MOD_ID, "totem_" + entry.getKey()),
 						container,
-						Component.literal("Totemcuk: узор тотема " + entry.getValue()),
+						Component.literal("Totemcuk: контур тотема " + entry.getValue()),
 						PackActivationType.NORMAL);
 			}
 		});
