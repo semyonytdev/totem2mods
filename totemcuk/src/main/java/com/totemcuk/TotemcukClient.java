@@ -44,6 +44,8 @@ public class TotemcukClient implements ClientModInitializer {
 		Map<String, String> colors = new LinkedHashMap<>();
 		colors.put("red", "красный");
 		colors.put("orange", "оранжевый");
+		colors.put("yellow", "жёлтый");
+		colors.put("green", "зелёный");
 		colors.put("cyan", "голубой");
 		colors.put("blue", "синий");
 		colors.put("purple", "фиолетовый");
