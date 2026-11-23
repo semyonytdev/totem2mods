@@ -3,10 +3,24 @@
   "id": "totemcuk",
   "version": "${version}",
   "name": "Totemcuk",
-  "description": "Меняет цвет зелёного узора на тотеме бессмертия. Выбор цвета: Настройки, Ресурспаки.",
-  "authors": ["Семён Гридин"],
+  "description": "Меняет цвет узора тотема бессмертия. Команда в игре: /totemcuk красный (или #RRGGBB).",
+  "authors": [
+    "Семён Гридин"
+  ],
   "license": "MIT",
   "environment": "client",
-  "entrypoints": { "client": ["com.totemcuk.TotemcukClient"] },
-  "depends": { "fabricloader": ">=0.18.1", "minecraft": "~1.21.11", "java": ">=21", "fabric-api": "*" }
+  "entrypoints": {
+    "client": [
+      "com.totemcuk.TotemcukClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.18.1",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "mixins": [
+    "totemcuk.mixins.json"
+  ]
 }

@@ -3,7 +3,11 @@ package com.totemcuk;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.mojang.brigadier.arguments.StringArgumentType;
+
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 import net.fabricmc.fabric.api.resource.v1.pack.PackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
@@ -19,6 +23,24 @@ public class TotemcukClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
+		TotemcukConfig.load();
+		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
+				dispatcher.register(ClientCommandManager.literal("totemcuk")
+						.executes(ctx -> {
+							ctx.getSource().sendFeedback(Component.literal("Totemcuk: /totemcuk <цвет>. Цвета: " + TotemcukConfig.names()));
+							return 1;
+						})
+						.then(ClientCommandManager.argument("color", StringArgumentType.greedyString())
+								.executes(ctx -> {
+									String value = StringArgumentType.getString(ctx, "color");
+									if (TotemcukConfig.set(value)) {
+										ctx.getSource().sendFeedback(Component.literal("Totemcuk: цвет узора теперь " + value));
+										return 1;
+									}
+									ctx.getSource().sendError(Component.literal("Не знаю такой цвет. Цвета: " + TotemcukConfig.names()));
+									return 0;
+								}))));
+
 		Map<String, String> colors = new LinkedHashMap<>();
 		colors.put("red", "красный");
 		colors.put("orange", "оранжевый");
