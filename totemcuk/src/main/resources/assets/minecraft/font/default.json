@@ -1,0 +1,76 @@
+{
+  "providers": [
+    {
+      "type": "bitmap",
+      "file": "totemcuk:font/icon_circle.png",
+      "ascent": 7,
+      "height": 8,
+      "chars": [
+        "\ue001"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "totemcuk:font/icon_star.png",
+      "ascent": 7,
+      "height": 8,
+      "chars": [
+        "\ue002"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "totemcuk:font/icon_heart.png",
+      "ascent": 7,
+      "height": 8,
+      "chars": [
+        "\ue003"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "totemcuk:font/icon_crown.png",
+      "ascent": 7,
+      "height": 8,
+      "chars": [
+        "\ue004"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "totemcuk:font/icon_snowflake.png",
+      "ascent": 7,
+      "height": 8,
+      "chars": [
+        "\ue005"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "totemcuk:font/icon_penguin.png",
+      "ascent": 7,
+      "height": 8,
+      "chars": [
+        "\ue006"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "totemcuk:font/icon_diamond.png",
+      "ascent": 7,
+      "height": 8,
+      "chars": [
+        "\ue007"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "totemcuk:font/icon_bolt.png",
+      "ascent": 7,
+      "height": 8,
+      "chars": [
+        "\ue008"
+      ]
+    }
+  ]
+}

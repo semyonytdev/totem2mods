@@ -27,9 +27,15 @@ public class TotemcukClient implements ClientModInitializer {
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
 				dispatcher.register(ClientCommandManager.literal("totemcuk")
 						.executes(ctx -> {
-							ctx.getSource().sendFeedback(Component.literal("Totemcuk: /totemcuk <цвет>. Цвета: " + TotemcukConfig.names()));
+							ctx.getSource().sendFeedback(Component.literal("Totemcuk: /totemcuk <цвет>. Цвета: " + TotemcukConfig.names() + ". Значок: /totemcuk значок <имя>. Значки: " + TotemcukConfig.iconNames()));
 							return 1;
 						})
+						.then(ClientCommandManager.literal("значок")
+								.then(ClientCommandManager.argument("name", StringArgumentType.greedyString())
+										.executes(ctx -> setIcon(ctx.getSource(), StringArgumentType.getString(ctx, "name")))))
+						.then(ClientCommandManager.literal("icon")
+								.then(ClientCommandManager.argument("name", StringArgumentType.greedyString())
+										.executes(ctx -> setIcon(ctx.getSource(), StringArgumentType.getString(ctx, "name")))))
 						.then(ClientCommandManager.argument("color", StringArgumentType.greedyString())
 								.executes(ctx -> {
 									String value = StringArgumentType.getString(ctx, "color");
@@ -62,5 +68,14 @@ public class TotemcukClient implements ClientModInitializer {
 						PackActivationType.NORMAL);
 			}
 		});
+	}
+
+	private static int setIcon(net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource source, String name) {
+		if (TotemcukConfig.setIcon(name)) {
+			source.sendFeedback(Component.literal("Totemcuk: значок рядом с ником: " + name + " (его видно в режиме от третьего лица, F5)"));
+			return 1;
+		}
+		source.sendError(Component.literal("Не знаю такой значок. Значки: " + TotemcukConfig.iconNames()));
+		return 0;
 	}
 }

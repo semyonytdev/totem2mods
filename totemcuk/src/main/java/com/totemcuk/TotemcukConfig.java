@@ -30,6 +30,24 @@ public final class TotemcukConfig {
 			"cyan", "голубой", "blue", "синий", "purple", "фиолетовый", "pink", "розовый",
 			"white", "белый", "black", "чёрный");
 
+	private static final Map<String, Character> ICONS = new LinkedHashMap<>();
+	static {
+		ICONS.put("круг", '\uE001');
+		ICONS.put("звезда", '\uE002');
+		ICONS.put("сердце", '\uE003');
+		ICONS.put("корона", '\uE004');
+		ICONS.put("снежинка", '\uE005');
+		ICONS.put("пингвин", '\uE006');
+		ICONS.put("алмаз", '\uE007');
+		ICONS.put("молния", '\uE008');
+	}
+	private static final Map<String, String> ICONS_EN = Map.of(
+			"circle", "круг", "star", "звезда", "heart", "сердце", "crown", "корона",
+			"snowflake", "снежинка", "penguin", "пингвин", "diamond", "алмаз", "bolt", "молния");
+
+	private static String iconName = "";
+	private static String icon = "";
+
 	/** null значит оставить оригинальный цвет игры. */
 	private static float[] color = null;
 	private static String text = "";
@@ -45,7 +63,13 @@ public final class TotemcukConfig {
 		try {
 			Path f = file();
 			if (Files.exists(f)) {
-				set(Files.readString(f, StandardCharsets.UTF_8).trim());
+				String[] lines = Files.readString(f, StandardCharsets.UTF_8).split("\\R");
+				if (lines.length > 0 && !lines[0].isBlank()) {
+					set(lines[0].trim());
+				}
+				if (lines.length > 1 && !lines[1].isBlank()) {
+					setIcon(lines[1].trim());
+				}
 			}
 		} catch (IOException | RuntimeException ignored) {
 			// без конфига остаётся оригинальный цвет
@@ -87,10 +111,39 @@ public final class TotemcukConfig {
 
 	private static void save() {
 		try {
-			Files.writeString(file(), text, StandardCharsets.UTF_8);
+			Files.writeString(file(), text + "\n" + iconName + "\n", StandardCharsets.UTF_8);
 		} catch (IOException ignored) {
 			// не страшно
 		}
+	}
+
+	/** Возвращает true, если значок понятен. «выкл» убирает значок. */
+	public static boolean setIcon(String input) {
+		String s = input.trim().toLowerCase(Locale.ROOT);
+		if (s.equals("выкл") || s.equals("off") || s.equals("нет")) {
+			iconName = "";
+			icon = "";
+			save();
+			return true;
+		}
+		String ru = ICONS_EN.getOrDefault(s, s);
+		Character ch = ICONS.get(ru);
+		if (ch == null) {
+			return false;
+		}
+		iconName = ru;
+		icon = String.valueOf(ch);
+		save();
+		return true;
+	}
+
+	/** Символ значка или пустая строка. */
+	public static String icon() {
+		return icon;
+	}
+
+	public static String iconNames() {
+		return String.join(", ", ICONS.keySet()) + " или выкл";
 	}
 
 	public static float[] color() {
