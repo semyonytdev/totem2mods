@@ -45,6 +45,7 @@ public final class TotemcukConfig {
 			"circle", "круг", "star", "звезда", "heart", "сердце", "crown", "корона",
 			"snowflake", "снежинка", "penguin", "пингвин", "diamond", "алмаз", "bolt", "молния");
 
+	private static boolean cape = true;
 	private static String iconName = "";
 	private static String icon = "";
 
@@ -69,6 +70,9 @@ public final class TotemcukConfig {
 				}
 				if (lines.length > 1 && !lines[1].isBlank()) {
 					setIcon(lines[1].trim());
+				}
+				if (lines.length > 2 && !lines[2].isBlank()) {
+					cape = !lines[2].trim().equals("off");
 				}
 			}
 		} catch (IOException | RuntimeException ignored) {
@@ -111,7 +115,7 @@ public final class TotemcukConfig {
 
 	private static void save() {
 		try {
-			Files.writeString(file(), text + "\n" + iconName + "\n", StandardCharsets.UTF_8);
+			Files.writeString(file(), text + "\n" + iconName + "\n" + (cape ? "on" : "off") + "\n", StandardCharsets.UTF_8);
 		} catch (IOException ignored) {
 			// не страшно
 		}
@@ -144,6 +148,23 @@ public final class TotemcukConfig {
 
 	public static String iconNames() {
 		return String.join(", ", ICONS.keySet()) + " или выкл";
+	}
+
+	public static boolean capeEnabled() {
+		return cape;
+	}
+
+	public static boolean setCape(String input) {
+		String s = input.trim().toLowerCase(Locale.ROOT);
+		if (s.equals("вкл") || s.equals("on")) {
+			cape = true;
+		} else if (s.equals("выкл") || s.equals("off")) {
+			cape = false;
+		} else {
+			return false;
+		}
+		save();
+		return true;
 	}
 
 	public static float[] color() {

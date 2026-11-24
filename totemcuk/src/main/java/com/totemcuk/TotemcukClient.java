@@ -33,6 +33,17 @@ public class TotemcukClient implements ClientModInitializer {
 						.then(ClientCommandManager.literal("значок")
 								.then(ClientCommandManager.argument("name", StringArgumentType.greedyString())
 										.executes(ctx -> setIcon(ctx.getSource(), StringArgumentType.getString(ctx, "name")))))
+						.then(ClientCommandManager.literal("плащ")
+								.then(ClientCommandManager.argument("state", StringArgumentType.greedyString())
+										.executes(ctx -> {
+											String v = StringArgumentType.getString(ctx, "state");
+											if (TotemcukConfig.setCape(v)) {
+												ctx.getSource().sendFeedback(Component.literal("Totemcuk: плащ " + v + " (виден в третьем лице, F5)"));
+												return 1;
+											}
+											ctx.getSource().sendError(Component.literal("Напиши: /totemcuk плащ вкл или /totemcuk плащ выкл"));
+											return 0;
+										})))
 						.then(ClientCommandManager.literal("icon")
 								.then(ClientCommandManager.argument("name", StringArgumentType.greedyString())
 										.executes(ctx -> setIcon(ctx.getSource(), StringArgumentType.getString(ctx, "name")))))
