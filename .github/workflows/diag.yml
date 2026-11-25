@@ -21,7 +21,9 @@ jobs:
       - name: Собрать нужные исходники
         run: |
           mkdir -p /tmp/out
-          J=$(find ~/.gradle -name 'minecraft-merged*sources.jar' -o -name 'minecraft-clientOnly*sources.jar' | head -5)
+          mkdir -p /tmp/src
+          find / -name '*sources.jar' -path '*inecraft*' 2>/dev/null | head -20
+          J=$(find / -name '*sources.jar' -path '*inecraft*' -size +5M 2>/dev/null | head -5)
           echo "$J"
           for j in $J; do unzip -qo "$j" -d /tmp/src || true; done
           for p in CapeLayer PlayerSkin PlayerInfo AbstractClientPlayer AvatarRenderer AvatarRenderState ClientAsset; do
