@@ -10,13 +10,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.totemcuk.TotemcukConfig;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.ClientAsset;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.PlayerSkin;
 
-/** Подставляет свой плащ только для тебя. */
-@Mixin(PlayerInfo.class)
+/** Подставляет свой плащ только для тебя (работает даже без записи в списке игроков). */
+@Mixin(AbstractClientPlayer.class)
 public abstract class PlayerInfoMixin {
 	private static final Identifier CAPE = Identifier.fromNamespaceAndPath("totemcuk", "cape");
 
@@ -25,9 +25,7 @@ public abstract class PlayerInfoMixin {
 		if (!TotemcukConfig.capeEnabled()) {
 			return;
 		}
-		Minecraft mc = Minecraft.getInstance();
-		PlayerInfo self = (PlayerInfo) (Object) this;
-		if (mc.player == null || !self.getProfile().id().equals(mc.player.getUUID())) {
+		if ((Object) this != Minecraft.getInstance().player) {
 			return;
 		}
 		PlayerSkin skin = cir.getReturnValue();
