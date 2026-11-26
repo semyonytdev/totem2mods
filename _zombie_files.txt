@@ -1,0 +1,6 @@
+/tmp/src/net/minecraft/client/renderer/entity/ZombieNautilusRenderer.java
+/tmp/src/net/minecraft/client/renderer/entity/ZombieVillagerRenderer.java
+/tmp/src/net/minecraft/client/renderer/entity/ZombieRenderer.java
+/tmp/src/net/minecraft/client/renderer/entity/AbstractZombieRenderer.java
+/tmp/src/net/minecraft/client/renderer/entity/state/ZombieVillagerRenderState.java
+/tmp/src/net/minecraft/client/renderer/entity/state/ZombieRenderState.java

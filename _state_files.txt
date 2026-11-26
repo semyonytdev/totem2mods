@@ -1,0 +1,2 @@
+/tmp/src/net/minecraft/client/renderer/entity/state/AvatarRenderState.java
+/tmp/src/net/minecraft/client/renderer/entity/state/HumanoidRenderState.java
