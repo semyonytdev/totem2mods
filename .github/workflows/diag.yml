@@ -1,0 +1,40 @@
+name: Диагностика
+on:
+  push:
+    paths: ['.github/workflows/diag.yml']
+permissions:
+  contents: write
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: current
+      - run: gradle genSources --no-daemon
+        working-directory: totemcuk
+      - name: Собрать нужное
+        run: |
+          mkdir -p /tmp/src /tmp/jar /tmp/out
+          for j in $(find / -name '*sources.jar' -path '*inecraft*' -size +5M 2>/dev/null | head -5); do unzip -qo "$j" -d /tmp/src || true; done
+          for j in $(find / -name 'minecraft*.jar' -not -name '*sources*' -size +10M 2>/dev/null | head -5); do unzip -qo "$j" 'version.json' 'data/minecraft/worldgen/structure/ancient_city.json' 'data/minecraft/worldgen/template_pool/ancient_city/*' 'data/minecraft/worldgen/structure_set/ancient_cities.json' 'data/minecraft/worldgen/processor_list/ancient_city*' 'data/minecraft/tags/worldgen/biome/has_structure/ancient_city.json' 'data/minecraft/worldgen/structure/trail_ruins.json' 'data/minecraft/loot_table/entities/zombie.json' 'assets/minecraft/textures/entity/zombie/zombie.png' 'assets/minecraft/textures/entity/player/wide/*' 'assets/minecraft/sounds.json' 'assets/minecraft/textures/entity/zombie/*' -d /tmp/jar 2>/dev/null || true; done
+          cp -r /tmp/jar/* /tmp/out/ 2>/dev/null || true
+          for p in ZombieRenderer AbstractZombieRenderer ZombieRenderState Zombie Monster Mob LivingEntity SoundEvents ZombieModel HumanoidMobRenderer EntityRenderers FabricDefaultAttributeRegistry JigsawStructure StructureTemplate StructureTemplatePool StructurePoolElement SinglePoolElement RuleProcessor ProcessorRule ServerPlayer ExperienceOrb MeleeAttackGoal NearestAttackableTargetGoal EntityRendererProvider SoundEvent Block Level; do
+            find /tmp/src -name "$p.java" -exec cp --backup=numbered {} /tmp/out/ \;
+          done
+          find / -name 'EntityRendererRegistry*.java' -o -name 'FabricDefaultAttributeRegistry.java' 2>/dev/null | head -3 | xargs -I{} cp {} /tmp/out/ || true
+          find /tmp/src -path '*render*' -name '*Zombie*.java' | head -20 > /tmp/out/_zombie_files.txt
+          grep -rln "class AvatarRenderState\|class HumanoidRenderState" /tmp/src > /tmp/out/_state_files.txt || true
+          du -sh /tmp/out
+      - name: Запушить
+        run: |
+          cd /tmp/out
+          git init -q -b diag-src
+          git config user.email a@b.c; git config user.name diag
+          git add -A; git commit -qm diag
+          git push -f https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git diag-src
